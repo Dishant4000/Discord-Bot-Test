@@ -1,6 +1,6 @@
 {
     "BOT": {
-        "TOKEN": "MTQzMzAyODIwMTAwNDc5ODA4NA.GdJJS7.KB_EevsDGFbziFjoB0dxjvmdjeOH9eUQz8kBCE",
+        "TOKEN": "",
         "PREFIX": ".",
         "OWNER_ID": 1363348121098129632
     },
@@ -33,4 +33,5 @@
         "ADMIN": [],
         "MODERATOR": []
     }
+
 }
