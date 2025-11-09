@@ -1,0 +1,36 @@
+{
+    "BOT": {
+        "TOKEN": "MTQzMzAyODIwMTAwNDc5ODA4NA.GdJJS7.KB_EevsDGFbziFjoB0dxjvmdjeOH9eUQz8kBCE",
+        "PREFIX": ".",
+        "OWNER_ID": 1363348121098129632
+    },
+    "TICKET": {
+        "ticket_transcript_id": 1433058960751071345,
+        "ticket_open_category": 1433009611417456723,
+        "owner_ticket_panel": 1433053192765177876
+    },
+    "BOT_DATA": {
+        "LOG_ID": 1433021422850015282,
+        "ERROR_LOG": 1433451049091596428,
+        "WELCOME_CHANNEL_ID": 1433009610301767757,
+        "LEAVE_CHANNEL_ID": 1433009610301767758,
+        "DASHBOARD_TOKEN": "Dishant2198#YT",
+        "OPENROUTER_API_KEY": "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"
+    },
+    "PAYMENT_METHODS": {
+        "UPI": "dishantpatidar283@okaxis",
+        "LTC": "ltc1q22ekk9spfw52wlfsqzc97spx7xmpuaxnwfqkne"
+    },
+    "NOWPAYMENTS": {
+        "API_KEY": "ESV93N2-PZVMNPF-PSC4YXB-5F9XGW5",
+        "LTC_WALLET": "ltc1q22ekk9spfw52wlfsqzc97spx7xmpuaxnwfqkne"
+    },
+    "PERMISSIONS": {
+        "FULL_ACCESS": [
+            1363348121098129632,
+            186234813098110669
+        ],
+        "ADMIN": [],
+        "MODERATOR": []
+    }
+}
