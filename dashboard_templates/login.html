@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Login</title>
+  <style>
+    /* 🎨 Global Styles */
+    * {
+      box-sizing: border-box;
+      font-family: "Inter", system-ui, sans-serif;
+    }
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(-45deg, #2b2f7a, #3842b1, #00b4d8, #0096c7);
+      background-size: 400% 400%;
+      animation: gradientMove 10s ease infinite;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* 🧊 Login Box */
+    .login-box {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      padding: 40px 50px;
+      width: 350px;
+      text-align: center;
+      color: #fff;
+      animation: fadeInUp 0.8s ease forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .login-box h2 {
+      margin-bottom: 8px;
+      font-size: 1.6rem;
+    }
+
+    .login-box p {
+      font-size: 0.95rem;
+      color: #dce7ff;
+      margin-bottom: 20px;
+    }
+
+    /* 🔑 Input Field */
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 18px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    input::placeholder {
+      color: #d1d1d1;
+    }
+
+    input:focus {
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+    }
+
+    /* 🚀 Login Button */
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #00b4d8, #2b2f7a);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    }
+
+    /* ⚠️ Error Message */
+    .error {
+      color: #ffb3b3;
+      background: rgba(255, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin-bottom: 14px;
+      font-size: 0.9rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* 🕶️ Footer */
+    footer {
+      position: absolute;
+      bottom: 10px;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      width: 100%;
+    }
+
+    /* 📱 Responsive */
+    @media (max-width: 450px) {
+      .login-box {
+        width: 90%;
+        padding: 30px 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-box">
+    <h2>🔐 Dashboard Login</h2>
+    <p>Enter your secure dashboard token below</p>
+
+    {% if message %}
+      <div class="error">{{ message }}</div>
+    {% endif %}
+
+    <form method="post">
+      <input name="token" placeholder="Enter dashboard token" required>
+      <button class="btn" type="submit">Login</button>
+    </form>
+  </div>
+
+  <footer>© 2025 Dishant’s Bot Panel</footer>
+</body>
+</html>

@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block body %}
+  <style>
+    /* =========================
+       ✨ Server Info Page Styling
+       ========================= */
+
+    h2, p {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    body.loaded h2, body.loaded p {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    /* 💡 Highlight card (Summary bar) */
+    .summary-card {
+      background: linear-gradient(90deg, #2b2f7a, #3842b1);
+      color: #fff;
+      padding: 14px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      margin-bottom: 14px;
+      font-size: 0.95rem;
+      animation: fadeInUp 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 🌍 Server Cards Container */
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px;
+      flex: 1;
+      min-width: 260px;
+      max-width: 320px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeCard 0.4s ease forwards;
+    }
+
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes fadeCard {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 18px rgba(107,222,255,0.25);
+      background: rgba(107,222,255,0.05);
+    }
+
+    .card img {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      vertical-align: middle;
+      margin-bottom: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .card strong {
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .card small {
+      color: #888;
+    }
+
+    .card b {
+      color: #2b2f7a;
+    }
+
+    body.dark .card b {
+      color: #7dafff;
+    }
+
+    /* ❌ Empty message */
+    .muted {
+      color: #666;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+      animation: fadeIn 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    body.dark .muted {
+      color: #9fb0c8;
+    }
+
+  </style>
+  
+  <title>Dashboard - ServerInfo</title>
+  <h2>🖥️ Server Information</h2>
+  <p>Data synced from <code>server_database.json</code></p>
+
+  {% if info %}
+    <div class="summary-card">
+      🌐 <b>Total Servers:</b> {{ total_servers }} &nbsp;|&nbsp;
+      👥 <b>Total Members:</b> {{ total_members }} &nbsp;|&nbsp;
+      🕒 <b>Last Updated:</b> {{ updated }}
+    </div>
+
+    <div class="cards">
+    {% for id, s in servers.items() %}
+      <div class="card">
+        {% if s.icon_url %}
+          <img src="{{ s.icon_url }}" alt="server icon">
+        {% endif %}
+        <strong>{{ s.name }}</strong><br>
+        <small>ID:</small> <code>{{ s.id }}</code><br>
+        👑 <b>Owner:</b> {{ s.owner }}<br>
+        👥 <b>Members:</b> {{ s.member_count }}<br>
+        📂 <b>Channels:</b> {{ s.channels }}<br>
+        🎭 <b>Roles:</b> {{ s.roles }}<br>
+        🚀 <b>Boost:</b> Level {{ s.boost_level }} ({{ s.boost_count }} boosts)<br>
+        📅 <b>Created:</b> {{ s.created_at }}
+      </div>
+    {% endfor %}
+    </div>
+  {% else %}
+    <div class="muted">❌ No server data found. Run <code>.update_serverinfo</code> from your bot.</div>
+  {% endif %}
+
+  <script>
+    // Prevent flicker: mark page loaded to keep animations once
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block body %}
+  <title>Dashboard - Payments</title>
+
+  <style>
+    /* 🌈 Professional Payments Page Design */
+    h2 {
+      margin-bottom: 14px;
+      animation: fadeIn 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      animation: fadeInUp 0.7s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    thead {
+      background: linear-gradient(90deg, #2b2f7a, #3842b1);
+      color: #fff;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    tbody tr:hover {
+      background: rgba(107, 222, 255, 0.08);
+    }
+
+    tbody tr {
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    tbody tr:hover {
+      transform: scale(1.01);
+    }
+
+    .muted {
+      color: #888;
+      text-align: center;
+      margin-top: 15px;
+      animation: fadeIn 0.5s ease forwards;
+      opacity: 0;
+    }
+
+    /* 💳 Payment table responsiveness */
+    @media (max-width: 800px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+      thead {
+        display: none;
+      }
+      tr {
+        background: var(--card-bg);
+        margin-bottom: 12px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        padding: 10px;
+      }
+      td {
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 10px;
+        font-size: 0.9rem;
+      }
+      td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #2b2f7a;
+      }
+    }
+
+    /* 🌙 Dark Mode Tweaks */
+    body.dark thead {
+      background: linear-gradient(90deg);
+    }
+
+    body.dark tbody tr:hover {
+      background: rgba(255,255,255,0.05);
+    }
+  </style>
+
+  <h2>💰 Payments</h2>
+
+  {% if payments %}
+    <table>
+      <thead>
+        <tr>
+          <th>Payment ID</th>
+          <th>User ID</th>
+          <th>USD</th>
+          <th>LTC</th>
+          <th>Address</th>
+          <th>Status</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for pid, p in payments.items() %}
+        <tr>
+          <td data-label="Payment ID">{{ pid }}</td>
+          <td data-label="User ID">{{ p.user_id }}</td>
+          <td data-label="USD">{{ p.amount_usd }}</td>
+          <td data-label="LTC">{{ p.ltc_amount }}</td>
+          <td data-label="Address" style="max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+            {{ p.address }}
+          </td>
+          {% if p.status == "finished" %}
+          <td data-label="Status"><span class="success">✅ Completed</span></td>
+          {% elif p.status == "waiting" %}
+          <td data-label="Status"><span class="waiting">🕒 Waiting</span></td>
+          {% else %}
+          <td data-label="Status"><span class="in-progress">❌ {{ p.status }}</span></td>
+          {% endif %}
+          <td data-label="Created">{{ p.created_at }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="muted">💸 No payments recorded</div>
+  {% endif %}
+
+  <script>
+    // Smooth reveal animation
+    window.addEventListener("load", () => {
+      document.querySelectorAll("h2, table, .muted").forEach(el => {
+        el.style.opacity = "1";
+        el.style.transform = "translateY(0)";
+      });
+    });
+  </script>
+{% endblock %}

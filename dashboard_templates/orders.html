@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% block body %}
+  <style>
+    /* ======= Animated Professional Design for Orders Page ======= */
+
+    h2, h3 {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    /* Play fade-in only once on first page load */
+    .fade-once {
+      animation: fadeAppear 0.6s ease forwards;
+    }
+
+    @keyframes fadeAppear {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Once page fully loaded, all fade-once elements stay visible */
+    body.loaded .fade-once {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    /* === Table Styling === */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background: var(--card-bg);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    thead {
+      background: linear-gradient(90deg, #2b2f7a, #3842b1);
+      color: #fff;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+      font-size: 0.93rem;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    tbody tr {
+      opacity: 0;
+      transform: translateY(8px);
+      animation: fadeRow 0.4s ease forwards;
+    }
+
+    tbody tr:nth-child(1) { animation-delay: 0.05s; }
+    tbody tr:nth-child(2) { animation-delay: 0.1s; }
+    tbody tr:nth-child(3) { animation-delay: 0.15s; }
+    tbody tr:nth-child(4) { animation-delay: 0.2s; }
+
+    @keyframes fadeRow {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    tbody tr:hover {
+      background: rgba(107, 222, 255, 0.07);
+      transition: background 0.25s ease;
+    }
+
+    tbody td small.muted {
+      color: #888;
+      font-size: 0.8rem;
+    }
+
+    /* === Buttons === */
+    .btn {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: none;
+      background: linear-gradient(90deg, #2b2f7a, #3842b1);
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.25s ease;
+    }
+
+    .btn:hover {
+      background: linear-gradient(90deg, #3241a8, #4e5de6);
+      transform: translateY(-2px);
+      box-shadow: 0 0 10px rgba(107, 222, 255, 0.4);
+    }
+
+    .btn.secondary {
+      background: linear-gradient(90deg, #6a6fba, #8086e8);
+    }
+
+    .btn.secondary:hover {
+      background: linear-gradient(90deg, #7b80d0, #9aa0f5);
+      box-shadow: 0 0 10px rgba(155, 168, 255, 0.4);
+    }
+
+    /* === Muted text and table empty messages === */
+    .muted {
+      color: #666;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+
+    body.dark .muted {
+      color: #9fb0c8;
+    }
+
+    /* === Section spacing === */
+    .muted + table, .muted + div {
+      margin-top: 6px;
+    }
+
+  </style>
+  
+  <title>Dashboard - Orders</title>
+  <h2 class="fade-once">📦 Orders</h2>
+
+  <h3 class="fade-once">💰 Pending Payments</h3>
+  {% if pending_payments %}
+    <table class="fade-once">
+      <thead>
+        <tr><th>ID</th><th>User</th><th>Item</th><th>Amount</th><th>Date</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+      {% for oid, o in pending_payments.items() %}
+        <tr>
+          <td>{{ oid }}</td>
+          <td>{{ o.user_name }} <small class="muted">({{ o.user_id }})</small></td>
+          <td>{{ o.item }}</td>
+          <td>${{ o.amount }}</td>
+          <td>{{ o.timestamp }}</td>
+          <td>
+            <form class="inline" method="post">
+              <input type="hidden" name="order_id" value="{{ oid }}">
+              <button class="btn secondary" formaction="{{ url_for('move_to_delivery') }}">Move to Pending Delivery</button>
+              <button class="btn" formaction="{{ url_for('delete_order') }}">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="muted fade-once">No pending payments</div>
+  {% endif %}
+
+  <h3 class="fade-once">🚚 Pending Deliveries</h3>
+  {% if pending_delivery %}
+    <table class="fade-once">
+      <thead>
+        <tr><th>ID</th><th>User</th><th>Item</th><th>Amount</th><th>Date</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+      {% for oid, o in pending_delivery.items() %}
+        <tr>
+          <td>{{ oid }}</td>
+          <td>{{ o.user_name }} <small class="muted">({{ o.user_id }})</small></td>
+          <td>{{ o.item }}</td>
+          <td>${{ o.amount }}</td>
+          <td>{{ o.timestamp }}</td>
+          <td>
+            <form class="inline" method="post" action="{{ url_for('mark_delivered') }}">
+              <input type="hidden" name="order_id" value="{{ oid }}">
+              <button class="btn">Mark Delivered</button>
+            </form>
+            <form class="inline" method="post" action="{{ url_for('delete_order') }}">
+              <input type="hidden" name="order_id" value="{{ oid }}">
+              <button class="btn secondary">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="muted fade-once">No pending deliveries</div>
+  {% endif %}
+
+  <h3 class="fade-once">✅ Delivered Orders</h3>
+  {% if delivered %}
+    <table class="fade-once">
+      <thead>
+        <tr><th>ID</th><th>User</th><th>Item</th><th>Date</th></tr>
+      </thead>
+      <tbody>
+      {% for oid, o in delivered.items() %}
+        <tr>
+          <td>{{ oid }}</td>
+          <td>{{ o.user_name }} <small class="muted">({{ o.user_id }})</small></td>
+          <td>{{ o.item }}</td>
+          <td>{{ o.delivered_at or o.timestamp }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="muted fade-once">No delivered orders</div>
+  {% endif %}
+
+  <script>
+    // Mark body as loaded once content is fully ready (prevents flicker)
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+  </script>
+{% endblock %}

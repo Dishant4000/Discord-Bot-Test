@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block body %}
+  <style>
+    /* =========================
+       ✨ Animated Professional Styling for Products
+       ========================= */
+    h2, h3 {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .fade-once {
+      animation: fadeAppear 0.6s ease forwards;
+    }
+
+    @keyframes fadeAppear {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    body.loaded .fade-once {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    /* 🧾 Form Styling */
+    form {
+      margin-bottom: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    input {
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 0.9rem;
+      background: var(--card-bg);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #4e5de6;
+      box-shadow: 0 0 6px rgba(78,93,230,0.4);
+    }
+
+    /* 🧩 Table Design */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background: var(--card-bg);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: background 0.3s ease, color 0.3s ease;
+      animation: fadeInTable 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeInTable {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    thead {
+      background: linear-gradient(90deg, #2b2f7a, #3842b1);
+      color: #fff;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+      font-size: 0.93rem;
+    }
+
+    tbody tr {
+      opacity: 0;
+      transform: translateY(8px);
+      animation: fadeRow 0.4s ease forwards;
+    }
+
+    tbody tr:nth-child(1) { animation-delay: 0.1s; }
+    tbody tr:nth-child(2) { animation-delay: 0.2s; }
+    tbody tr:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes fadeRow {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    tbody tr:hover {
+      background: rgba(107, 222, 255, 0.07);
+      transition: background 0.25s ease;
+    }
+
+    /* 🖱️ Button Styling */
+    .btn {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: none;
+      background: linear-gradient(90deg, #2b2f7a, #3842b1);
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.25s ease;
+    }
+
+    .btn:hover {
+      background: linear-gradient(90deg, #3241a8, #4e5de6);
+      transform: translateY(-2px);
+      box-shadow: 0 0 10px rgba(107, 222, 255, 0.4);
+    }
+
+    .btn.secondary {
+      background: linear-gradient(90deg, #6a6fba, #8086e8);
+    }
+
+    .btn.secondary:hover {
+      background: linear-gradient(90deg, #7b80d0, #9aa0f5);
+      box-shadow: 0 0 10px rgba(155, 168, 255, 0.4);
+    }
+
+    /* 🕶️ Muted Text */
+    .muted {
+      color: #666;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+
+    body.dark .muted {
+      color: #9fb0c8;
+    }
+
+    /* 🪄 Fade-in Smoothly */
+    .fade-in {
+      animation: fadeAppear 0.6s ease forwards;
+    }
+  </style>
+  
+  <title>Dashboard - Products</title>
+  <h2 class="fade-once">🛒 Products</h2>
+
+  <h3 class="fade-once">➕ Add Product</h3>
+  <form method="post" action="{{ url_for('products_add') }}" class="fade-once">
+    <input name="name" placeholder="Product name" required>
+    <input name="price" placeholder="Price (USD)" required>
+    <input name="stock" placeholder="Stock">
+    <input name="description" placeholder="Description" style="width:50%;">
+    <button class="btn" type="submit">Add</button>
+  </form>
+
+  <h3 class="fade-once">📦 Existing Products</h3>
+  {% if products %}
+    <table class="fade-once">
+      <thead>
+        <tr><th>Product</th><th>Price</th><th>Stock</th><th>Description</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+      {% for name, p in products.items() %}
+        <tr>
+          <td>{{ name }}</td>
+          <td>${{ p.price }}</td>
+          <td>{{ p.stock }}</td>
+          <td>{{ p.description }}</td>
+          <td>
+            <form class="inline" method="post" action="{{ url_for('products_delete') }}">
+              <input type="hidden" name="name" value="{{ name }}">
+              <button class="btn secondary">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="muted fade-once">No products</div>
+  {% endif %}
+
+  <script>
+    // Prevent flicker on reload — show animation only once
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+  </script>
+{% endblock %}
